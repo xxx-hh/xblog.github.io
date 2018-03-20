@@ -50,7 +50,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -88,7 +88,7 @@
 <h3 id="redis特点"><a href="#redis特点" class="headerlink" title="redis特点"></a>redis特点</h3><ul>
 <li>Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的  时候可以再次加载进行使用。</li>
 <li>Redis不仅仅支持简单的key-value类型的数据，同时还提供list，set，zset，hash等数据结构的存储。</li>
-<li>Redis支持数据的备份，即master-slave模式的数据备份。<br>BSD协议<h2 id="redis未授权访问漏洞"><a href="#redis未授权访问漏洞" class="headerlink" title="redis未授权访问漏洞"></a>redis未授权访问漏洞</h2><h3 id="漏洞的影响"><a href="#漏洞的影响" class="headerlink" title="漏洞的影响"></a>漏洞的影响</h3>攻击者在未授权访问 Redis 的情况下可以利用 Redis 的相关方法，可以成功在 Redis 服务器上写入公钥，进而可以使用对应私钥直接登录目标服务器。<h3 id="漏洞产生的原因"><a href="#漏洞产生的原因" class="headerlink" title="漏洞产生的原因"></a>漏洞产生的原因</h3>Redis 服务暴露到公网上，如果在没有开启认证的情况下，可以导致任意用户在可以访问目标服务器的情况下未授权访问 Redis 以及读取 Redis 的数据。<h3 id="公钥登陆"><a href="#公钥登陆" class="headerlink" title="公钥登陆"></a>公钥登陆</h3>用户将自己的SSH公钥储存在远程主机上。登录的时候，远程主机会向用户发送一段随机字符串，用户用自己的私钥加密后，再发回来。远程主机用事先储存的公钥进行解密，如果成功，就证明用户是可信的，允许直接登录shell，不再要求密码。<br><img src="http://p5vwq294k.bkt.clouddn.com/%E5%9B%BE%E7%89%87.png" alt="enter description here"><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3>即只要向目标机器~/.ssh/authorized_keys的文件写入自己的公钥，就可以直接登陆目标机器的shell。<h2 id="渗透场景"><a href="#渗透场景" class="headerlink" title="渗透场景"></a>渗透场景</h2><img src="http://p5vwq294k.bkt.clouddn.com/redis.png" alt=""><h2 id="漏洞的重现和利用"><a href="#漏洞的重现和利用" class="headerlink" title="漏洞的重现和利用"></a>漏洞的重现和利用</h2><h3 id="漏洞环境搭建"><a href="#漏洞环境搭建" class="headerlink" title="漏洞环境搭建"></a>漏洞环境搭建</h3></li>
+<li>Redis支持数据的备份，即master-slave模式的数据备份。<h2 id="redis未授权访问漏洞"><a href="#redis未授权访问漏洞" class="headerlink" title="redis未授权访问漏洞"></a>redis未授权访问漏洞</h2><h3 id="漏洞的影响"><a href="#漏洞的影响" class="headerlink" title="漏洞的影响"></a>漏洞的影响</h3>攻击者在未授权访问 Redis 的情况下可以利用 Redis 的相关方法，可以成功在 Redis 服务器上写入公钥，进而可以使用对应私钥直接登录目标服务器。<h3 id="漏洞产生的原因"><a href="#漏洞产生的原因" class="headerlink" title="漏洞产生的原因"></a>漏洞产生的原因</h3>Redis 服务暴露到公网上，如果在没有开启认证的情况下，可以导致任意用户在可以访问目标服务器的情况下未授权访问 Redis 以及读取 Redis 的数据。<h3 id="公钥登陆"><a href="#公钥登陆" class="headerlink" title="公钥登陆"></a>公钥登陆</h3>用户将自己的SSH公钥储存在远程主机上。登录的时候，远程主机会向用户发送一段随机字符串，用户用自己的私钥加密后，再发回来。远程主机用事先储存的公钥进行解密，如果成功，就证明用户是可信的，允许直接登录shell，不再要求密码。<br><img src="http://p5vwq294k.bkt.clouddn.com/%E5%9B%BE%E7%89%87.png" alt="enter description here"><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3>即只要向目标机器~/.ssh/authorized_keys的文件写入自己的公钥，就可以直接登陆目标机器的shell。<h2 id="渗透场景"><a href="#渗透场景" class="headerlink" title="渗透场景"></a>渗透场景</h2><img src="http://p5vwq294k.bkt.clouddn.com/redis.png" alt=""><h2 id="漏洞的重现和利用"><a href="#漏洞的重现和利用" class="headerlink" title="漏洞的重现和利用"></a>漏洞的重现和利用</h2><h3 id="漏洞环境搭建"><a href="#漏洞环境搭建" class="headerlink" title="漏洞环境搭建"></a>漏洞环境搭建</h3></li>
 </ul>
 <ol>
 <li>安装和启动redis服务<br>在win10下的虚拟机fedora26<br>安装redis时默认会将redis绑定在0.0.0.0：6397<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> yum install redis*</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> redis-server</span></span><br></pre></td></tr></table></figure>
@@ -106,7 +106,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/19/redis未授权访问漏洞/" data-id="cjezjbtpm0002dsah69am2mo1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/03/19/redis未授权访问漏洞/" data-id="cjezlali10001csah8e1pf291" class="article-share-link">Delen</a>
       
       
     </footer>
@@ -142,7 +142,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/17/hello-xblog/" data-id="cjezjbtpk0001dsah14h69me5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/03/17/hello-xblog/" data-id="cjezlali40002csah9waqlw2c" class="article-share-link">Delen</a>
       
       
     </footer>
@@ -187,7 +187,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/17/hello-world/" data-id="cjezjbtow0000dsahdbbi7siz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/03/17/hello-world/" data-id="cjezlalhw0000csahkdrtgbue" class="article-share-link">Delen</a>
       
       
     </footer>
@@ -212,7 +212,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archieven</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
     </div>
@@ -222,7 +222,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Recente berichten</h3>
     <div class="widget">
       <ul>
         
