@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Vulnerability,php," />
 
 
 
@@ -79,14 +79,26 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://yoursite.com/about/index.html">
+<meta name="description" content="漏洞影响php在5.3.4中修复了%00截断的问题，所以对于php版本&amp;lt;5.3.4的依然有比较大的风险 1.上传时路径可控，使用00截断 2.文件下载时，00截断绕过白名单检查 3.文件包含时，00截断后面限制(主要是本地包含时) 4.其它与文件操作有关的地方都可能使用00截断。 实际演示直接选择php文件时提示只能上传图片文件使用burp suite抓包对方使用的php版本为5.3.29可">
+<meta name="keywords" content="Vulnerability,php">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP的00截断">
+<meta property="og:url" content="http://yoursite.com/2018/03/31/PHP的00截断/index.html">
 <meta property="og:site_name" content="世界上最帅的人">
+<meta property="og:description" content="漏洞影响php在5.3.4中修复了%00截断的问题，所以对于php版本&amp;lt;5.3.4的依然有比较大的风险 1.上传时路径可控，使用00截断 2.文件下载时，00截断绕过白名单检查 3.文件包含时，00截断后面限制(主要是本地包含时) 4.其它与文件操作有关的地方都可能使用00截断。 实际演示直接选择php文件时提示只能上传图片文件使用burp suite抓包对方使用的php版本为5.3.29可">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-21T11:44:11.190Z">
+<meta property="og:image" content="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD1.png">
+<meta property="og:image" content="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD2.png">
+<meta property="og:image" content="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD3.png">
+<meta property="og:image" content="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD4.png">
+<meta property="og:image" content="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD5.png">
+<meta property="og:image" content="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD6.png">
+<meta property="og:image" content="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD7.png">
+<meta property="og:updated_time" content="2018-03-31T04:31:09.762Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="about">
+<meta name="twitter:title" content="PHP的00截断">
+<meta name="twitter:description" content="漏洞影响php在5.3.4中修复了%00截断的问题，所以对于php版本&amp;lt;5.3.4的依然有比较大的风险 1.上传时路径可控，使用00截断 2.文件下载时，00截断绕过白名单检查 3.文件包含时，00截断后面限制(主要是本地包含时) 4.其它与文件操作有关的地方都可能使用00截断。 实际演示直接选择php文件时提示只能上传图片文件使用burp suite抓包对方使用的php版本为5.3.29可">
+<meta name="twitter:image" content="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD1.png">
 
 
 
@@ -116,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/about/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/31/PHP的00截断/"/>
 
 
 
 
 
-  <title>about | 世界上最帅的人</title>
+  <title>PHP的00截断 | 世界上最帅的人</title>
   
 
 
@@ -251,33 +263,202 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/31/PHP的00截断/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄小辉同学">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://p5vwq294k.bkt.clouddn.com/gakiki.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="世界上最帅的人">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">about</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
+          <h1 class="post-title" itemprop="name headline">PHP的00截断</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-31T00:37:00+08:00">
+                2018-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-      </div>
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/essay/" itemprop="url" rel="index">
+                    <span itemprop="name">essay</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h2 id="漏洞影响"><a href="#漏洞影响" class="headerlink" title="漏洞影响"></a>漏洞影响</h2><p>php在5.3.4中修复了%00截断的问题，所以对于php版本&lt;5.3.4的依然有比较大的风险</p>
+<p>1.上传时路径可控，使用00截断</p>
+<p>2.文件下载时，00截断绕过白名单检查</p>
+<p>3.文件包含时，00截断后面限制(主要是本地包含时)</p>
+<p>4.其它与文件操作有关的地方都可能使用00截断。</p>
+<h2 id="实际演示"><a href="#实际演示" class="headerlink" title="实际演示"></a>实际演示</h2><p>直接选择php文件时提示只能上传图片文件<br><img src="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD1.png" alt="image"><br><img src="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD2.png" alt="image"><br>使用burp suite抓包<br>对方使用的php版本为5.3.29可以使用00截断<br><img src="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD3.png" alt="image"><br>需要修改两个地方，1.在上传路径后添加/upload/1.php并在最后添加一个空格， 2.修改文件名字为.jpg<br><img src="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD4.png" alt="image"><br>找到前面添加空格的地方，hex码为20修改为00<br><img src="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD5.png" alt="image"><br>修改后<br><img src="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD6.png" alt="image"><br>最后拿到flag<br><img src="http://p5vwq294k.bkt.clouddn.com/00%E6%88%AA%E6%96%AD7.png" alt="image"><br>对面会判断文件名，以及上传路径名，文件名可以手动修改，但上传路径名是文件保存时候的名字，需要以php保存，所以需要使用00截断。</p>
+
       
     </div>
     
     
     
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/we.png" alt="黄小辉同学 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/air.png" alt="黄小辉同学 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Vulnerability/" rel="tag"># Vulnerability</a>
+          
+            <a href="/tags/php/" rel="tag"># php</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/29/当你在看着这篇文章的时候，你在看着什么/" rel="next" title="当你在看着这篇文章的时候，你在看着什么">
+                <i class="fa fa-chevron-left"></i> 当你在看着这篇文章的时候，你在看着什么
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -315,8 +496,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -380,6 +570,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞影响"><span class="nav-number">1.</span> <span class="nav-text">漏洞影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际演示"><span class="nav-number">2.</span> <span class="nav-text">实际演示</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
