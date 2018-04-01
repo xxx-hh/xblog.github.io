@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="职位描述：1.对公司网站、业务系统进行安全评估测试。黑盒、白盒测试（学习黑盒测试，白盒测试） 2.对公司各类系统进行安全加固（学习系统的安全配置）； 3.对公司安全事件进行响应，清理后门，根据日志分析攻击途径（学会查找后门，分析日志） 4.安全技术研究，包括安全防范技术，黑客技术等 5.跟踪最新漏洞信息，进行业务产品的安全检查。（关注最新的漏洞信息，并尝试配置防御方法） 职位要求：1.熟悉主流的W">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web安全工程师">
+<meta property="og:url" content="http://yoursite.com/2018/04/01/web安全工程师学习大纲/index.html">
+<meta property="og:site_name" content="世界上最帅的人">
+<meta property="og:description" content="职位描述：1.对公司网站、业务系统进行安全评估测试。黑盒、白盒测试（学习黑盒测试，白盒测试） 2.对公司各类系统进行安全加固（学习系统的安全配置）； 3.对公司安全事件进行响应，清理后门，根据日志分析攻击途径（学会查找后门，分析日志） 4.安全技术研究，包括安全防范技术，黑客技术等 5.跟踪最新漏洞信息，进行业务产品的安全检查。（关注最新的漏洞信息，并尝试配置防御方法） 职位要求：1.熟悉主流的W">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5vwq294k.bkt.clouddn.com/%E5%A5%BD%E5%A5%BD%E5%85%88%E7%94%9F.bmp">
+<meta property="og:updated_time" content="2018-04-01T14:59:16.227Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="web安全工程师">
+<meta name="twitter:description" content="职位描述：1.对公司网站、业务系统进行安全评估测试。黑盒、白盒测试（学习黑盒测试，白盒测试） 2.对公司各类系统进行安全加固（学习系统的安全配置）； 3.对公司安全事件进行响应，清理后门，根据日志分析攻击途径（学会查找后门，分析日志） 4.安全技术研究，包括安全防范技术，黑客技术等 5.跟踪最新漏洞信息，进行业务产品的安全检查。（关注最新的漏洞信息，并尝试配置防御方法） 职位要求：1.熟悉主流的W">
+<meta name="twitter:image" content="http://p5vwq294k.bkt.clouddn.com/%E5%A5%BD%E5%A5%BD%E5%85%88%E7%94%9F.bmp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/01/web安全工程师学习大纲/"/>
+
+
+
+
+
+  <title>web安全工程师 | 世界上最帅的人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/src/fireworks.js"></script>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">世界上最帅的人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">超神大魔王！！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/01/web安全工程师学习大纲/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄小辉同学">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://p5vwq294k.bkt.clouddn.com/gakiki.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="世界上最帅的人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">web安全工程师</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-01T22:21:00+08:00">
+                2018-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/essay/" itemprop="url" rel="index">
+                    <span itemprop="name">essay</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="职位描述："><a href="#职位描述：" class="headerlink" title="职位描述："></a>职位描述：</h1><p>1.对公司网站、业务系统进行安全评估测试。黑盒、白盒测试（学习黑盒测试，白盒测试）</p>
+<p>2.对公司各类系统进行安全加固（学习系统的安全配置）；</p>
+<p>3.对公司安全事件进行响应，清理后门，根据日志分析攻击途径（学会查找后门，分析日志）</p>
+<p>4.安全技术研究，包括安全防范技术，黑客技术等</p>
+<p>5.跟踪最新漏洞信息，进行业务产品的安全检查。（关注最新的漏洞信息，并尝试配置防御方法）</p>
+<h1 id="职位要求："><a href="#职位要求：" class="headerlink" title="职位要求："></a>职位要求：</h1><p>1.熟悉主流的Web安全技术，包括SQL注入、==XSS==、==CSRF==、一句话木马等安全风险； </p>
+<p>2.熟悉国内外主流安全产品和工具，如：Nessus、==Nmap==、==AWVS==、==Burp==、Appscan等；</p>
+<p>3.==熟悉windows、linux平台渗透测试、后门分析、加固==；</p>
+<p>4.至少掌握一门编程语言C/C++/Perl/==Python==/==PHP==/Go/Java等；</p>
+<p>5.熟悉渗透测试的步骤、==方法==、流程，==具有Web安全实战经验==；</p>
+<p>6.熟悉常见安全攻防技术，对网络安全、系统安全、应用安全有深入的理解和自己的认识；</p>
+<p>7.对Web安全整体有深刻理解，==具备代码审计==和==独立漏洞挖掘==能力；</p>
+<p>8.具有较强的团队意识，高度的责任感，文档、方案能力优秀者优先。</p>
+<h1 id="学习路线："><a href="#学习路线：" class="headerlink" title="学习路线："></a>学习路线：</h1><h3 id="2周"><a href="#2周" class="headerlink" title="2周"></a>2周</h3><p>Web安全相关概念</p>
+<p>熟悉基本概念（SQL注入、上传、XSS、CSRF、一句话木马等）。</p>
+<ul>
+<li>通过关键字（SQL注入、上传、XSS、CSRF、一句话木马等）进行Google/SecWiki；</li>
+<li>阅读《精通脚本黑客》，虽然很旧也有错误，但是入门还是可以的；</li>
+<li>看一些渗透笔记/视频，了解渗透实战的整个过程，可以Google（渗透笔记、渗透过程、入侵过程等）；<h3 id="3周"><a href="#3周" class="headerlink" title="3周"></a>3周</h3>熟悉渗透相关工具<br>熟悉AWVS、sqlmap、Burp、nessus、chopper、nmap、Appscan等相关工具的使用。</li>
+</ul>
+<ol>
+<li>了解该类工具的用途和使用场景，先用软件名字Google/SecWiki；</li>
+<li>下载无后门版的这些软件进行安装；</li>
+<li>学习并进行使用，具体教材可以在SecWiki上搜索，例如：Brup的教程、sqlmap；</li>
+<li>待常用的这几个软件都学会了可以安装音速启动做一个渗透工具箱；<h3 id="5周"><a href="#5周" class="headerlink" title="5周"></a>5周</h3>渗透实战操作</li>
+</ol>
+<p>掌握渗透的整个阶段并能够独立渗透小型站点。</p>
+<ol>
+<li>网上找渗透视频看并思考其中的思路和原理，关键字（渗透、SQL注入视频、文件上传入侵、数据库备份、dedecms漏洞利用等等）；</li>
+<li>自己找站点/搭建测试环境进行测试，记住请隐藏好你自己；</li>
+<li>思考渗透主要分为几个阶段，每个阶段需要做那些工作，例如这个：<a href="http://netsec.ccert.edu.cn/hacking/files/2011/07/PTES_MindMap_CN1.pdf" target="_blank" rel="noopener">PTES渗透测试执行标准</a>；</li>
+<li>研究SQL注入的种类、注入原理、手动注入技巧；</li>
+<li>研究文件上传的原理，如何进行截断、双重后缀欺骗(IIS、PHP)、解析漏洞利用（IIS、Nignix、Apache）等，参照：<a href="http://www.owasp.org.cn/OWASP_Training/Upload_Attack_Framework.pdf" target="_blank" rel="noopener">上传攻击框架</a>；</li>
+<li>研究XSS形成的原理和种类，具体学习方法可以Google/SecWiki，可以参考：<a href="http://www.sec-wiki.com/news/search?wd=XSS" target="_blank" rel="noopener">XSS</a>；</li>
+<li>研究Windows/Linux提权的方法和具体使用，可以参考：<a href="http://www.sec-wiki.com/news/search?wd=%E6%8F%90%E6%9D%83" target="_blank" rel="noopener">提权</a>；</li>
+<li>可以参考: <a href="http://www.sec-wiki.com/topic/17" target="_blank" rel="noopener">开源渗透测试脆弱系统</a>；<h3 id="1周"><a href="#1周" class="headerlink" title="1周"></a>1周</h3>关注安全圈动态</li>
+</ol>
+<p>关注安全圈的最新漏洞、安全事件与技术文章。</p>
+<ol>
+<li>通过<a href="http://www.sec-wiki.com/" target="_blank" rel="noopener">SecWiki</a>浏览每日的安全技术文章/事件；</li>
+<li>通过Weibo/twitter关注安全圈的从业人员（遇到大牛的关注或者好友果断关注），天天抽时间刷一下；</li>
+<li>通过feedly/鲜果订阅国内外安全技术博客（不要仅限于国内，平时多注意积累），没有订阅源的可以看一下SecWiki的聚合栏目；</li>
+<li>养成习惯，每天主动提交安全技术文章链接到SecWiki进行积淀；</li>
+<li>多关注下最新漏洞列表，推荐几个：<a href="http://www.exploit-db.com/" target="_blank" rel="noopener">exploit-db</a>、<a href="http://cve.scap.org.cn/" target="_blank" rel="noopener">CVE中文库</a>、Wooyun等，遇到公开的漏洞都去实践下。</li>
+<li><p>关注国内国际上的安全会议的议题或者录像，推荐SecWiki-Conference。</p>
+<h3 id="3周-1"><a href="#3周-1" class="headerlink" title="3周"></a>3周</h3><p>熟悉Windows/Kali Linux</p>
+</li>
+<li><p>学习Windows/Kali Linux基本命令、常用工具；</p>
+</li>
+<li>熟悉Windows下的常用的cmd命令，例如：ipconfig,nslookup,tracert,net,tasklist,taskkill等；</li>
+<li>熟悉Linux下的常用命令，例如：ifconfig,ls,cp,mv,vi,wget,service,sudo等；</li>
+<li>熟悉Kali Linux系统下的常用工具，可以参考SecWiki,《Web Penetration Testing with Kali Linux》、《Hacking with Kali》等；</li>
+<li>熟悉metasploit工具，可以参考SecWiki、《Metasploit渗透测试指南》。<h3 id="3周-2"><a href="#3周-2" class="headerlink" title="3周"></a>3周</h3>服务器安全配置</li>
+</ol>
+<p>学习服务器环境配置，并能通过思考发现配置存在的安全问题。</p>
+<ol>
+<li>Windows2003/2008环境下的IIS配置，特别注意配置安全和运行权限，可以参考：<a href="http://www.sec-wiki.com/news/search?wd=%E9%85%8D%E7%BD%AE" target="_blank" rel="noopener">SecWiki-配置</a>；</li>
+<li>Linux环境下的LAMP的安全配置，主要考虑运行权限、跨目录、文件夹权限等，可以参考：<a href="http://www.sec-wiki.com/news/search?wd=%E9%85%8D%E7%BD%AE" target="_blank" rel="noopener">SecWiki-配置</a>；</li>
+<li>远程系统加固，限制用户名和口令登陆，通过iptables限制端口；</li>
+<li>配置软件Waf加强系统安全，在服务器配置mod_security等系统，参见<a href="http://www.sec-wiki.com/news/search?wd=modsecurity" target="_blank" rel="noopener">SecWiki-ModSecurity</a>；</li>
+<li>通过Nessus软件对配置环境进行安全检测，发现未知安全威胁。<h3 id="4周"><a href="#4周" class="headerlink" title="4周"></a>4周</h3>脚本编程学习</li>
+</ol>
+<p>选择脚本语言Perl/Python/PHP/Go/Java中的一种，对常用库进行编程学习。</p>
+<ol>
+<li>搭建开发环境和选择IDE，PHP环境推荐Wamp和XAMPP，IDE强烈推荐Sublime，一些Sublime的技巧：SecWiki-Sublime；</li>
+<li>Python编程学习，学习内容包含：语法、正则、文件、网络、多线程等常用库，推荐《Python核心编程》，不要看完；</li>
+<li>用Python编写漏洞的exp，然后写一个简单的网络爬虫，可参见SecWiki-爬虫、视频；</li>
+<li>PHP基本语法学习并书写一个简单的博客系统，参见《PHP与MySQL程序设计（第4版）》、视频；</li>
+<li>熟悉MVC架构，并试着学习一个PHP框架或者Python框架（可选）；</li>
+<li>了解Bootstrap的布局或者CSS，可以参考：SecWiki-Bootstrap;<h3 id="3周-3"><a href="#3周-3" class="headerlink" title="3周"></a>3周</h3>源码审计与漏洞分析</li>
+</ol>
+<p>能独立分析脚本源码程序并发现安全问题。</p>
+<ol>
+<li>熟悉源码审计的动态和静态方法，并知道如何去分析程序，参见<a href="http://www.sec-wiki.com/news/search?wd=%E5%AE%A1%E8%AE%A1" target="_blank" rel="noopener">SecWiki-审计</a>；</li>
+<li>从Wooyun上寻找开源程序的漏洞进行分析并试着自己分析；</li>
+<li>了解Web漏洞的形成原因，然后通过关键字进行查找分析，参见<a href="http://www.sec-wiki.com/news/search?wd=%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1" target="_blank" rel="noopener">SecWiki-代码审计</a>、<a href="https://code.google.com/p/pasc2at/wiki/SimplifiedChinese" target="_blank" rel="noopener">高级PHP应用程序漏洞审核技术</a>；</li>
+<li>研究Web漏洞形成原理和如何从源码层面避免该类漏洞，并整理成checklist。<h3 id="5周-1"><a href="#5周-1" class="headerlink" title="5周"></a>5周</h3>安全体系设计与开发</li>
+</ol>
+<p>能建立自己的安全体系，并能提出一些安全建议或者系统架构。</p>
+<ol>
+<li>开发一些实用的安全小工具并开源，体现个人实力；</li>
+<li>建立自己的安全体系，对公司安全有自己的一些认识和见解；</li>
+<li>提出或者加入大型安全系统的架构或者开发；</li>
+<li>看自己发展咯~<br><img src="http://p5vwq294k.bkt.clouddn.com/%E5%A5%BD%E5%A5%BD%E5%85%88%E7%94%9F.bmp" alt="image"></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/we.png" alt="黄小辉同学 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/air.png" alt="黄小辉同学 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/31/PHP的00截断/" rel="next" title="PHP的00截断">
+                <i class="fa fa-chevron-left"></i> PHP的00截断
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://p5vwq294k.bkt.clouddn.com/gakiki.jpg"
+                alt="黄小辉同学" />
+            
+              <p class="site-author-name" itemprop="name">黄小辉同学</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#职位描述："><span class="nav-number">1.</span> <span class="nav-text">职位描述：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#职位要求："><span class="nav-number">2.</span> <span class="nav-text">职位要求：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#学习路线："><span class="nav-number">3.</span> <span class="nav-text">学习路线：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2周"><span class="nav-number">3.0.1.</span> <span class="nav-text">2周</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3周"><span class="nav-number">3.0.2.</span> <span class="nav-text">3周</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5周"><span class="nav-number">3.0.3.</span> <span class="nav-text">5周</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1周"><span class="nav-number">3.0.4.</span> <span class="nav-text">1周</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3周-1"><span class="nav-number">3.0.5.</span> <span class="nav-text">3周</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3周-2"><span class="nav-number">3.0.6.</span> <span class="nav-text">3周</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4周"><span class="nav-number">3.0.7.</span> <span class="nav-text">4周</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3周-3"><span class="nav-number">3.0.8.</span> <span class="nav-text">3周</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5周-1"><span class="nav-number">3.0.9.</span> <span class="nav-text">5周</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄小辉同学</span>
+
+  
+</div>
+
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2159599"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
