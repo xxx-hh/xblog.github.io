@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="云计算，渗透," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x00前言本文主要是从靶场http://flaws.cloud/来学习有关AWS S3渗透测试的知识的，解题过程虽然大多可以直接根据靶场的提示做出来，但本文还结合了一些原理性的知识，大神请绕过… 0x01 原理S3是什么Amazon S3 是一种对象存储提供一个简单的 Web 服务界面，使用该界面，您可以随时在 Web 上的任何位置存储和检索任意数量的数据。Amazon S3 提供基于标准的简单">
+<meta name="keywords" content="云计算，渗透">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWS S3服务渗透">
+<meta property="og:url" content="http://yoursite.com/2018/08/28/AWS S3服务渗透/index.html">
+<meta property="og:site_name" content="世界上最帅的人">
+<meta property="og:description" content="0x00前言本文主要是从靶场http://flaws.cloud/来学习有关AWS S3渗透测试的知识的，解题过程虽然大多可以直接根据靶场的提示做出来，但本文还结合了一些原理性的知识，大神请绕过… 0x01 原理S3是什么Amazon S3 是一种对象存储提供一个简单的 Web 服务界面，使用该界面，您可以随时在 Web 上的任何位置存储和检索任意数量的数据。Amazon S3 提供基于标准的简单">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5vwq294k.bkt.clouddn.com/flaw.png">
+<meta property="og:updated_time" content="2018-08-28T08:55:19.227Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AWS S3服务渗透">
+<meta name="twitter:description" content="0x00前言本文主要是从靶场http://flaws.cloud/来学习有关AWS S3渗透测试的知识的，解题过程虽然大多可以直接根据靶场的提示做出来，但本文还结合了一些原理性的知识，大神请绕过… 0x01 原理S3是什么Amazon S3 是一种对象存储提供一个简单的 Web 服务界面，使用该界面，您可以随时在 Web 上的任何位置存储和检索任意数量的数据。Amazon S3 提供基于标准的简单">
+<meta name="twitter:image" content="http://p5vwq294k.bkt.clouddn.com/flaw.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/28/AWS S3服务渗透/"/>
+
+
+
+
+
+  <title>AWS S3服务渗透 | 世界上最帅的人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/src/fireworks.js"></script>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">世界上最帅的人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">超神大魔王！！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/28/AWS S3服务渗透/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄小辉同学">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://p5vwq294k.bkt.clouddn.com/gakiki.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="世界上最帅的人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">AWS S3服务渗透</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-28T16:16:58+08:00">
+                2018-08-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox"
+                 href="http://p5vwq294k.bkt.clouddn.com/flaw.png" rel="gallery_cjldhekoi000078ahoju5h543"
+                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="http://p5vwq294k.bkt.clouddn.com/flaw.png" itemprop="contentUrl"/>
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
+
+      
+        <h1 id="0x00前言"><a href="#0x00前言" class="headerlink" title="0x00前言"></a>0x00前言</h1><p>本文主要是从靶场<a href="http://flaws.cloud/来学习有关AWS" target="_blank" rel="noopener">http://flaws.cloud/来学习有关AWS</a> S3渗透测试的知识的，解题过程虽然大多可以直接根据靶场的提示做出来，但本文还结合了一些原理性的知识，大神请绕过…</p>
+<h1 id="0x01-原理"><a href="#0x01-原理" class="headerlink" title="0x01 原理"></a>0x01 原理</h1><h2 id="S3是什么"><a href="#S3是什么" class="headerlink" title="S3是什么"></a>S3是什么</h2><p>Amazon S3 是一种对象存储<br>提供一个简单的 Web 服务界面，使用该界面，您可以随时在 Web 上的任何位置存储和检索任意数量的数据。<br>Amazon S3 提供基于标准的简单 REST Web 服务接口，该接口可用于任何互联网开发工具箱。</p>
+<h2 id="安全机制"><a href="#安全机制" class="headerlink" title="安全机制"></a>安全机制</h2><p>默认情况下，所有Amazon S3资源 - 存储桶，对象和相关子资源（例如， lifecycle配置和website配置）都是私有的：只有资源所有者（创建它的AWS账户）才能访问该资源。资源所有者可以选择通过编写访问策略向其他人授予访问权限。</p>
+<p>客户可以使用四种机制来控制对 Amazon S3 资源的访问：</p>
+<ul>
+<li>Identity and Access Management (IAM) 策略</li>
+<li>存储桶策略</li>
+<li>访问控制列表 (ACL)      </li>
+<li>查询字符串身份验证</li>
+</ul>
+<p><strong>bucket是S3对数据的管理单元但读取是能够针对单一一个对象进行控制的<br>，一个bucket类似于一组数据的根目录, bucket内的文件称为“objects”.</strong></p>
+<h3 id="IAM策略"><a href="#IAM策略" class="headerlink" title="IAM策略"></a>IAM策略</h3><p>IAM 让拥有多名员工的组织能够使用一个 AWS 账户创建和管理多个用户。使用 IAM 策略，公司可向 IAM 用户授予对 Amazon S3 存储桶或对象的精细控制权，同时保留对用户执行的所有操作的完全控制。采用AK/SK认证。</p>
+<h3 id="存储桶策略"><a href="#存储桶策略" class="headerlink" title="存储桶策略"></a>存储桶策略</h3><p>使用存储桶策略，客户可以定义广泛适用于其 Amazon S3 资源的所有请求的规则，例如为 Amazon S3 资源的子集授予写入权限。客户还可以基于请求的某种特征（例如 HTTP 引用站点和 IP 地址）来限制访问。<br>策略例子:<br>{<br>    “Version”:”2012-10-17”,<br>    “Statement”: [<br>        {<br>            “Effect”:”Allow”,<br>            “Principal”: “<em>“,<br>            “Action”:[“s3:GetObject”],<br>            “Resource”:[“arn:aws:s3:::examplebucket/</em>“]<br>        }<br>    ]<br>}<br>所有人在资源arn:aws:s3:::examplebucket/*执行s3:GetObject的权限<br>对于与桶中资源权限：<br>s3:ListBucket<br>s3:ListMultipartUploadParts<br>s3:GetBucketAcl<br>s3:PutBucketAcl<br>s3:PutObject<br>s3:GetBucketNotification<br>s3:PutBucketNotification<br>s3:GetBucketPolicy<br>s3:PutBucketPolicy<br>s3:GetBucketTagging<br>s3:PutBucketTagging<br>s3:GetBucketWebsite<br>s3:PutBucketWebsite<br>s3:GetBucketCORS<br>s3:PutBucketCORS<br>s3:GetLifecycleConfiguration<br>s3:PutLifecycleConfiguration<br>s3:PutBucketLogging</p>
+<h3 id="ACL访问控制列表"><a href="#ACL访问控制列表" class="headerlink" title="ACL访问控制列表"></a>ACL访问控制列表</h3><h4 id="读取（READ）"><a href="#读取（READ）" class="headerlink" title="读取（READ）"></a>读取（READ）</h4><p>在bucket层，该权限允许用户列出bucket中的对象。<br>在对象层，该权限允许用户读取对象的内容及元数据。（列出对象）</p>
+<h4 id="写入（WRITE）"><a href="#写入（WRITE）" class="headerlink" title="写入（WRITE）"></a>写入（WRITE）</h4><p>在bucket层，该权限允许用户创建、覆盖以及删除bucket中的对象。</p>
+<h4 id="读取访问控制策略（READ-ACP）"><a href="#读取访问控制策略（READ-ACP）" class="headerlink" title="读取访问控制策略（READ_ACP）"></a>读取访问控制策略（READ_ACP）</h4><p>在bucket层，该权限允许用户读取bucket的访问控制列表。在对象层，该权限允许用户读取对象的访问控制列表（该对象能被访问的用户）。</p>
+<h4 id="写入访问控制策略（WRITE-ACP）"><a href="#写入访问控制策略（WRITE-ACP）" class="headerlink" title="写入访问控制策略（WRITE_ACP）"></a>写入访问控制策略（WRITE_ACP）</h4><p>在bucket层，该权限允许用户设置bucket的ACL。在对象层，该权限允许用户设置对象的ACL（修改能访问的列表）。</p>
+<h4 id="完全控制（FULL-CONTROL）"><a href="#完全控制（FULL-CONTROL）" class="headerlink" title="完全控制（FULL_CONTROL）"></a>完全控制（FULL_CONTROL）</h4><p>在bucket层，该权限等同于向用户许可“READ”、“WRITE”、“READACP”以及“WRITEACP”权限。在对象层，该权限等同于向用户许可“READ”、“READACP”以及“WRITEACP”权限。<br>在这里，待授权的用户可以是独立的AWS用户，由用户ID以及邮箱来标识，也可以是如下某个预定义的组：</p>
+<h4 id="认证用户组（The-Authenticated-Users-Group）"><a href="#认证用户组（The-Authenticated-Users-Group）" class="headerlink" title="认证用户组（The Authenticated Users Group）"></a>认证用户组（The Authenticated Users Group）</h4><p>该组代表所有的AWS用户，对应“<a href="http://acs.amazonaws.com/groups/global/AuthenticatedUsers”" target="_blank" rel="noopener">http://acs.amazonaws.com/groups/global/AuthenticatedUsers”</a> 这个URI。</p>
+<h4 id="所有用户组（The-All-Users-Group）"><a href="#所有用户组（The-All-Users-Group）" class="headerlink" title="所有用户组（The All Users Group）"></a>所有用户组（The All Users Group）</h4><p>代表所有用户（包括匿名用户），对应“<a href="http://acs.amazonaws.com/groups/global/AllUsers”" target="_blank" rel="noopener">http://acs.amazonaws.com/groups/global/AllUsers”</a> 这个URI。</p>
+<h4 id="日志传输组（The-Log-Delivery-Group）"><a href="#日志传输组（The-Log-Delivery-Group）" class="headerlink" title="日志传输组（The Log Delivery Group）"></a>日志传输组（The Log Delivery Group）</h4><p>仅用于访问日志记录，对应“<a href="http://acs.amazonaws.com/groups/s3/LogDelivery”" target="_blank" rel="noopener">http://acs.amazonaws.com/groups/s3/LogDelivery”</a> 这个URI。</p>
+<p>通过 ACL，客户可为特定用户授予对单个存储段或数据元的特定权限（例如读取、写入、完全控制）。</p>
+<p>全部用户：无需认证<br>AuthenticatedUsers：是其中的一个预定义组，意为计算机验证你的身份合法，你就会有一个有效的AWS凭证，即登录请求的所有AWS帐户都在该组内。</p>
+<h3 id="字符串身份验证"><a href="#字符串身份验证" class="headerlink" title="字符串身份验证"></a>字符串身份验证</h3><p>借助查询字符串身份验证，客户可以为 Amazon S3 对象创建一个仅在有限时间内有效的 URL。</p>
+<h2 id="安全配置"><a href="#安全配置" class="headerlink" title="安全配置"></a>安全配置</h2><ul>
+<li>严格控制访问控制列表，确定The Authenticated Users Group的使用正确</li>
+<li>AS/SC密钥管理问题</li>
+<li>元数据的使用，如果没有用到应该禁止使用或者仅限root用户访问</li>
+<li>尽可能减少IAM角色不必要的权限</li>
+</ul>
+<h1 id="0x02解题"><a href="#0x02解题" class="headerlink" title="0x02解题"></a>0x02解题</h1><h3 id="桶名"><a href="#桶名" class="headerlink" title="桶名"></a>桶名</h3><p>url: <a href="http://bucketname.s3.amazonaws.com其中bucketname是桶名" target="_blank" rel="noopener">http://bucketname.s3.amazonaws.com其中bucketname是桶名</a><br>因为采用了全局同一命名的规则，所以可以通过公司域名子域名的方式去猜测桶名<br>还可以试试bucket包含域media.acme.edu上ACME的音频文件，使用media.acme.edu，acme-edu-media，acme-audio或acme-media等</p>
+<h3 id="访问资源"><a href="#访问资源" class="headerlink" title="访问资源"></a>访问资源</h3><ul>
+<li><p>安装aws的客户端（支持python2和python3）<br>客户端列出桶中资源命令<br>sudo aws s3 ls s3://$bucketname/ –region $region</p>
+</li>
+<li><p>直接访问url<br>根据返回的code判断是有无该桶资源以及有无权限访问<br><img src="http://p5vwq294k.bkt.clouddn.com/s31.png" alt="enter description here"><br><img src="http://p5vwq294k.bkt.clouddn.com/s32.png" alt="enter description here"></p>
+</li>
+</ul>
+<h3 id="第一关"><a href="#第一关" class="headerlink" title="第一关"></a>第一关</h3><p>根据说明所有的资源都在域名flaws.cloud，所以直接找<br>Dns解析域名<br><img src="http://p5vwq294k.bkt.clouddn.com/s33.png" alt="enter description here"><br>DNS反解析 发现在域us-west-2下<br><img src="http://p5vwq294k.bkt.clouddn.com/s34.png" alt="enter description here"><br>尝试以无需签名认证的方式直接下载该桶资源<br><img src="http://p5vwq294k.bkt.clouddn.com/s35.png" alt="enter description here"><br>命令意思为aws s3服务以sync协议的方式从flaws.cloud桶中下载到本地dir文件夹下以无需前面的方式，–region后是桶资源所在域<br>最后成功下载，下一个地址在secret.heml中<br><img src="http://p5vwq294k.bkt.clouddn.com/s36.png" alt="enter description here"><br><img src="http://p5vwq294k.bkt.clouddn.com/s37.png" alt="enter description here"></p>
+<h3 id="第二关"><a href="#第二关" class="headerlink" title="第二关"></a>第二关</h3><p>根据说明，需要有AWS账户</p>
+<p>尝试以无签名认证的方式发现无权限访问<br><img src="http://p5vwq294k.bkt.clouddn.com/s39.png" alt="enter description here"><br>在AWS的web控制台中配置角色，并获取AS/SC密钥然后配置在客户端配置</p>
+<p>前两项为角色的ak和sk,第三项为自己账号所在域，第四项为输出格式。<br><img src="http://p5vwq294k.bkt.clouddn.com/s40.png" alt="enter description here"></p>
+<p>配置成功就再使用相同的命令就能成功下载<br><img src="http://p5vwq294k.bkt.clouddn.com/s41.png" alt="enter description here"></p>
+<p><strong><em>注意：Any Authenticated AWS User的权限意味着任何拥有aws账号的人都能够访问，并不是说只有自己客户能访问。</em></strong></p>
+<h3 id="第三关"><a href="#第三关" class="headerlink" title="第三关"></a>第三关</h3><p>题目描述为寻找AWS的密钥</p>
+<p>直接下载第三关的桶资源文件<br><img src="http://p5vwq294k.bkt.clouddn.com/s42.png" alt="enter description here"></p>
+<p>里面存在一个.git的日志文件<br><img src="http://p5vwq294k.bkt.clouddn.com/s43.png" alt="enter description here"><br>查看git日志，发现有两次上传记录<br><img src="http://p5vwq294k.bkt.clouddn.com/s44.png" alt="enter description here"><br>获取两次记录不同的地方，看到红字的地方就是aws的密钥了<br><img src="http://p5vwq294k.bkt.clouddn.com/s45.png" alt="enter description here"><br>用找到的key设置配置文件<br><img src="http://p5vwq294k.bkt.clouddn.com/s46.png" alt="enter description here"><br>显示刚刚建立好的配置文件里账户的内容<br><img src="http://p5vwq294k.bkt.clouddn.com/s47.png" alt="enter description here"></p>
+<p><strong>注意：这一题强调的点大概为AWS密钥信息的管理，如果将密钥信息上传到了github并且日志信息泄露，就算删除后也很容易根据日志信息找出密钥。</strong></p>
+<h3 id="第四关"><a href="#第四关" class="headerlink" title="第四关"></a>第四关</h3><p>以上一关的身份获取身份信息<br><img src="http://p5vwq294k.bkt.clouddn.com/s48.png" alt="enter description here"><br>根据刚刚得到的account获取快照信息<br><img src="http://p5vwq294k.bkt.clouddn.com/s49.png" alt="enter description here"></p>
+<p>尝试在自己账户中用找到的快照id创建卷，但在控制台中并没看到创建成功的卷<br><img src="http://p5vwq294k.bkt.clouddn.com/s50.png" alt="enter description here"><br>在控制台创建发现没有前面的找到的快照id<br><img src="http://p5vwq294k.bkt.clouddn.com/s51.png" alt="enter description here"><br>最后解题应该是要成功挂载快照，然后在虚拟机中查找用户名和密码</p>
+<p><strong>注意：快照权限是仅为自己做个备份还是绑定到全网，如果绑定在全网代表着其他人能够通过快照ID创建卷并挂载获取虚拟机内内容。</strong></p>
+<h3 id="第五关"><a href="#第五关" class="headerlink" title="第五关"></a>第五关</h3><p>题目描述这个EC2上有一个简单的HTTP代理并给出了使用示例。<br><img src="http://p5vwq294k.bkt.clouddn.com/s88.png" alt="enter description here"><br>大致是让用该代理去获取虚拟机的隐藏目录</p>
+<p>AWS有一个服务器169.254.169.254用于去获取元数据信息。</p>
+<p>元数据（Metadata）的使用<br>任何能够访问实例的都能根据这个元数据获取实例的相关信息<br>实例内部访问元数据：<a href="http://169.254.169.254/latest/meta-data/" target="_blank" rel="noopener">http://169.254.169.254/latest/meta-data/</a><br><img src="http://p5vwq294k.bkt.clouddn.com/s52.png" alt="enter description here"><br>具体能够获取到的信息在官方文档<a href="http://docs.amazonaws.cn/AWSEC2/latest/UserGuide/ec2-instance-metadata.html" target="_blank" rel="noopener">http://docs.amazonaws.cn/AWSEC2/latest/UserGuide/ec2-instance-metadata.html</a></p>
+<p>如果虚拟机存在http的代理的时候，就可以从外部访问元数据<br><a href="http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/169.254.169.254/" target="_blank" rel="noopener">http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/169.254.169.254/</a><br>获取<br>通过代理4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy访问该实例元数据的版本<br><img src="http://p5vwq294k.bkt.clouddn.com/s52.png" alt="enter description here"><br>获取该实例上的项目信息<br><a href="http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/169.254.169.254/latest/meta-data/" target="_blank" rel="noopener">http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/169.254.169.254/latest/meta-data/</a><br><img src="http://p5vwq294k.bkt.clouddn.com/s53.png" alt="enter description here"><br>获取到了与实例相关的IAM角色凭证信息<br><img src="http://p5vwq294k.bkt.clouddn.com/s54.png" alt="enter description here"></p>
+<p>获取到主机绑定角色的认证信息<br><img src="http://p5vwq294k.bkt.clouddn.com/s55.png" alt="enter description here"><br>添加到配置文件中<br><img src="http://p5vwq294k.bkt.clouddn.com/s56.png" alt="enter description here"><br>根据获取到的身份信息列出该桶中资源列表<br><img src="http://p5vwq294k.bkt.clouddn.com/s57.png" alt="enter description here"><br>下载到本地dir/3目录下<br><img src="http://p5vwq294k.bkt.clouddn.com/s58.png" alt="enter description here"><br>在index.html找到下一关</p>
+<p><strong>注意：169.254.169.254是亚马逊服务中用于获取发送请求的EC2虚拟机相关信息的服务器，如果没有限制，任何能够访问到EC2的实例都能够访问到该服务器并获取实例的相关信息。</strong></p>
+<h3 id="第六关"><a href="#第六关" class="headerlink" title="第六关"></a>第六关</h3><p>题目给出了AS/SC密钥信息</p>
+<p>根据给出的身份凭证，获取iam user查看自己的身份<br><img src="http://p5vwq294k.bkt.clouddn.com/s59.png" alt="enter description here"></p>
+<p>根据获取到的用户名找到附加在该角色的策略<br>存在两个策略：SecurityAudit和list_apigateways<br><img src="http://p5vwq294k.bkt.clouddn.com/s60.png" alt="enter description here"><br>根据arn资源名称获取list_apigateways策略的描述信息<br><img src="http://p5vwq294k.bkt.clouddn.com/s61.png" alt="enter description here"><br>通过该策略的id和arn资源名称获取具体策略内容<br><img src="http://p5vwq294k.bkt.clouddn.com/s62.png" alt="enter description here"><br>即在资源arn：aws：apigateway：us-west-2 :: / restapis / *上<br>有apigateway：GET的权限</p>
+<p>同理获取另一个策略SecurityAudit的相关信息<br><img src="http://p5vwq294k.bkt.clouddn.com/s63.png" alt="enter description here"><br>获取该函数的相关策略信息<br>aws –region us-west-2 –profile level6 lambda get-policy –function-name Level6<br><img src="http://p5vwq294k.bkt.clouddn.com/s64.png" alt="enter description here"><br>发现是能够执行的execute-api，并且后面还有api的id:s33ppypa75</p>
+<p>获取该api的站点prod<br><img src="http://p5vwq294k.bkt.clouddn.com/s65.png" alt="enter description here"><br>最后通过apiid+api类型+域名+站点+函数名得到完整url，<br><a href="https://s33ppypa75.execute-api.us-west-2.amazonaws.com/Prod/level6" target="_blank" rel="noopener">https://s33ppypa75.execute-api.us-west-2.amazonaws.com/Prod/level6</a><br><img src="http://p5vwq294k.bkt.clouddn.com/s66.png" alt="enter description here"><br>最后完成</p>
+<p><em>注意：尽量不要分配给角色不必要的权限，读取自己和其他IAM策略的能力可以帮助攻击者找出环境中存在的内容并寻找漏洞和错误。</em></p>
+<h2 id="总结S3测试流程"><a href="#总结S3测试流程" class="headerlink" title="总结S3测试流程"></a>总结S3测试流程</h2><p>对于一个已知的桶名可以通过几步测试来确定该桶的权限<br>1.尝试列出bucket中托管的对象（READ）。<br>2.尝试将一个“test.txt”文件上传到bucket中（WRITE）。<br>3.尝试读取bucket的访问控制列表（READ_ACP）。<br>4.在不修改bucket的访问控制列表的前提下，尝试设置bucket的访问控制列表（WRITE_ACP）。<br>5.对于识别出来的每个S3对象，该扩展也执行了类似的测试。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/we.png" alt="黄小辉同学 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/air.png" alt="黄小辉同学 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/云计算，渗透/" rel="tag"># 云计算，渗透</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/25/开始实习啦啦啦啦啦啦啦啦/" rel="next" title="开始实习啦啦啦啦啦啦啦啦">
+                <i class="fa fa-chevron-left"></i> 开始实习啦啦啦啦啦啦啦啦
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://p5vwq294k.bkt.clouddn.com/gakiki.jpg"
+                alt="黄小辉同学" />
+            
+              <p class="site-author-name" itemprop="name">黄小辉同学</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://thief.one/" title="nMask's Blog" target="_blank">nMask's Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.leavesongs.com/" title="离别歌" target="_blank">离别歌</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.sec-wiki.com/" title="sec-viki" target="_blank">sec-viki</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x00前言"><span class="nav-number">1.</span> <span class="nav-text">0x00前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-原理"><span class="nav-number">2.</span> <span class="nav-text">0x01 原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#S3是什么"><span class="nav-number">2.1.</span> <span class="nav-text">S3是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安全机制"><span class="nav-number">2.2.</span> <span class="nav-text">安全机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IAM策略"><span class="nav-number">2.2.1.</span> <span class="nav-text">IAM策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存储桶策略"><span class="nav-number">2.2.2.</span> <span class="nav-text">存储桶策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ACL访问控制列表"><span class="nav-number">2.2.3.</span> <span class="nav-text">ACL访问控制列表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#读取（READ）"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">读取（READ）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#写入（WRITE）"><span class="nav-number">2.2.3.2.</span> <span class="nav-text">写入（WRITE）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#读取访问控制策略（READ-ACP）"><span class="nav-number">2.2.3.3.</span> <span class="nav-text">读取访问控制策略（READ_ACP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#写入访问控制策略（WRITE-ACP）"><span class="nav-number">2.2.3.4.</span> <span class="nav-text">写入访问控制策略（WRITE_ACP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完全控制（FULL-CONTROL）"><span class="nav-number">2.2.3.5.</span> <span class="nav-text">完全控制（FULL_CONTROL）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#认证用户组（The-Authenticated-Users-Group）"><span class="nav-number">2.2.3.6.</span> <span class="nav-text">认证用户组（The Authenticated Users Group）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#所有用户组（The-All-Users-Group）"><span class="nav-number">2.2.3.7.</span> <span class="nav-text">所有用户组（The All Users Group）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#日志传输组（The-Log-Delivery-Group）"><span class="nav-number">2.2.3.8.</span> <span class="nav-text">日志传输组（The Log Delivery Group）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串身份验证"><span class="nav-number">2.2.4.</span> <span class="nav-text">字符串身份验证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安全配置"><span class="nav-number">2.3.</span> <span class="nav-text">安全配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02解题"><span class="nav-number">3.</span> <span class="nav-text">0x02解题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#桶名"><span class="nav-number">3.0.1.</span> <span class="nav-text">桶名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问资源"><span class="nav-number">3.0.2.</span> <span class="nav-text">访问资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第一关"><span class="nav-number">3.0.3.</span> <span class="nav-text">第一关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二关"><span class="nav-number">3.0.4.</span> <span class="nav-text">第二关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三关"><span class="nav-number">3.0.5.</span> <span class="nav-text">第三关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四关"><span class="nav-number">3.0.6.</span> <span class="nav-text">第四关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第五关"><span class="nav-number">3.0.7.</span> <span class="nav-text">第五关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第六关"><span class="nav-number">3.0.8.</span> <span class="nav-text">第六关</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结S3测试流程"><span class="nav-number">3.1.</span> <span class="nav-text">总结S3测试流程</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄小辉同学</span>
+
+  
+</div>
+
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2159599"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
