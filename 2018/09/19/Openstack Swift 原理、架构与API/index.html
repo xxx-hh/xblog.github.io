@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="云计算,openstack," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x01 概述OpenStack Swift 开源项目提供了弹性可伸缩、高可用的分布式对象存储服务，适合存储大规模非结构化数据。Swift并不是文件系统或者实时的数据存储系统，它是对象存储，用于永久类型的静态数据的长期存储，这些数据可以检索、调整，必要时进行更新。最适合存储的数据类型的例子是虚拟机镜像、图片存储、邮件存储和存档备份。 0x02技术特性Swift的主要特性: 极高的数据持久性(Dur">
+<meta name="keywords" content="云计算,openstack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Openstack Swift 原理、架构与API">
+<meta property="og:url" content="http://yoursite.com/2018/09/19/Openstack Swift 原理、架构与API/index.html">
+<meta property="og:site_name" content="世界上最帅的人">
+<meta property="og:description" content="0x01 概述OpenStack Swift 开源项目提供了弹性可伸缩、高可用的分布式对象存储服务，适合存储大规模非结构化数据。Swift并不是文件系统或者实时的数据存储系统，它是对象存储，用于永久类型的静态数据的长期存储，这些数据可以检索、调整，必要时进行更新。最适合存储的数据类型的例子是虚拟机镜像、图片存储、邮件存储和存档备份。 0x02技术特性Swift的主要特性: 极高的数据持久性(Dur">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5vwq294k.bkt.clouddn.com/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8.jpg">
+<meta property="og:updated_time" content="2018-09-19T08:03:57.362Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Openstack Swift 原理、架构与API">
+<meta name="twitter:description" content="0x01 概述OpenStack Swift 开源项目提供了弹性可伸缩、高可用的分布式对象存储服务，适合存储大规模非结构化数据。Swift并不是文件系统或者实时的数据存储系统，它是对象存储，用于永久类型的静态数据的长期存储，这些数据可以检索、调整，必要时进行更新。最适合存储的数据类型的例子是虚拟机镜像、图片存储、邮件存储和存档备份。 0x02技术特性Swift的主要特性: 极高的数据持久性(Dur">
+<meta name="twitter:image" content="http://p5vwq294k.bkt.clouddn.com/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/19/Openstack Swift 原理、架构与API/"/>
+
+
+
+
+
+  <title>Openstack Swift 原理、架构与API | 世界上最帅的人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/src/fireworks.js"></script>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">世界上最帅的人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">超神大魔王！！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/19/Openstack Swift 原理、架构与API/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄小辉同学">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://p5vwq294k.bkt.clouddn.com/gakiki.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="世界上最帅的人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Openstack Swift 原理、架构与API</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-19T15:44:30+08:00">
+                2018-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox"
+                 href="http://p5vwq294k.bkt.clouddn.com/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8.jpg" rel="gallery_cjm8v35qt0001skahek3s8n81"
+                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="http://p5vwq294k.bkt.clouddn.com/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8.jpg" itemprop="contentUrl"/>
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
+
+      
+        <h1 id="0x01-概述"><a href="#0x01-概述" class="headerlink" title="0x01 概述"></a>0x01 概述</h1><p>OpenStack Swift 开源项目提供了弹性可伸缩、高可用的分布式对象存储服务，适合存储大规模非结构化数据。<br>Swift并不是文件系统或者实时的数据存储系统，它是对象存储，用于永久类型的静态数据的长期存储，这些数据可以检索、调整，必要时进行更新。最适合存储的数据类型的例子是虚拟机镜像、图片存储、邮件存储和存档备份。</p>
+<h1 id="0x02技术特性"><a href="#0x02技术特性" class="headerlink" title="0x02技术特性"></a>0x02技术特性</h1><h3 id="Swift的主要特性"><a href="#Swift的主要特性" class="headerlink" title="Swift的主要特性:"></a>Swift的主要特性:</h3><ul>
+<li>极高的数据持久性(Durability)。</li>
+<li>完全对称的系统架构：“对称”意味着Swift中各节点可以完全对等，能极大地降低系统维护成本。</li>
+<li>无限的可扩展性：一是数据存储容量无限可扩展；二是Swift性能(如QPS、吞吐量等)可线性提升。</li>
+<li>无单点故障：Swift的元数据存储是完全均匀随机分布的，并且与对象文件存储一样，元数据也会存储多份。整个Swift集群中，也没有一个角色是单点的，并且在架构和设计上保证无单点业务是有效的。</li>
+<li><p>简单、可依赖。</p>
+<h1 id="0x03关键技术"><a href="#0x03关键技术" class="headerlink" title="0x03关键技术"></a>0x03关键技术</h1><h2 id="3-1-一致性哈希-ConsistentHashing"><a href="#3-1-一致性哈希-ConsistentHashing" class="headerlink" title="3.1 一致性哈希(ConsistentHashing)"></a>3.1 一致性哈希(ConsistentHashing)</h2><p>  在分布式对象存储中，一个关键问题是数据该如何存放。Swift是基于一致性哈希技术，通过计算可将对象均匀分布到虚拟空间的虚拟节点上，在增加或删除节点时可大大减少需移动的数据量；虚拟空间大小通常采用2的n次幂，便于进行高效的移位操作；然后通过独特的数据结构 Ring(环)再将虚拟节点映射到实际的物理存储设备上，完成寻址过程。<br>总的来说，Swift中存在两种映射关系，对于一个文件，通过哈希算法(MD5)以及移位运算找到对应的虚节点(一对一的映射关系);虚节点再通过映射关系(ring文件中二维数组)找到对应的设备(多对多的映射关系)，这样就完成了一个文件存储在设备上的映射。<br><img src="http://p5vwq294k.bkt.clouddn.com/openstack%20swift1.png" alt="enter description here"><br><strong>定义</strong>：N：数据的副本总数；W：写操作被确认接受的副本数量；R：读操作的副本数量。</p>
+</li>
+</ul>
+<h2 id="3-2数据一致性模型-ConsistencyModel"><a href="#3-2数据一致性模型-ConsistencyModel" class="headerlink" title="3.2数据一致性模型(ConsistencyModel)"></a>3.2数据一致性模型(ConsistencyModel)</h2><p>Swift默认配置是N=3，W=2&gt;N/2，R=1或2，即每个对象会存在3个副本，这些副本会被尽量存储在不同区域的节点上；W=2表示至少需要更新2个副本才算写成功。<br>当R=1时，意味着某一个读操作成功便立刻返回，此种情况下可能会读取到旧版本（弱一致性模型）。<br>当R=2时，需要通过在读操作请求头中增加x-newest=true参数来同时读取2个副本的元数据信息，然后比较时间戳来确定哪个是最新版本（强一致性模型）。</p>
+<h2 id="3-3环-Ring"><a href="#3-3环-Ring" class="headerlink" title="3.3环(Ring)"></a>3.3环(Ring)</h2><p> 环是为了将虚拟节点(partition，分区)均衡地映射到一组物理存储设备上，并提供一定的冗余度而设计的，其数据结构由以下信息组成：<br>存储设备列表，设备信息包括唯一标识号(id)、区域号(zone)、权重(weight)、IP 地址(ip)、端口(port)、设备名称(device)、元数据(meta)；<br><img src="http://p5vwq294k.bkt.clouddn.com/openstack%20swift2.png" alt="enter description here"><br>  使用对象的层次结构 account/container/object 作为键，使用 MD5 散列算法得到一个散列值，对该散列值的前 4 个字节进行右移操作得到分区索引号，移动位数由上面的 part_shift 设置指定(一致性哈希映射到虚拟节点)；按照分区索引号在分区到设备映射表(replica2part2dev_id)里查找该对象所在分区的对应的所有设备编号，这些设备会被尽量选择部署在不同区域(Zone)内<br> 总的来说，Ring引入一致性哈希的原因是为了减少由于增加结点导致数据项移动的数量来提高单调性；引入partition的原因是为了减少由于节点数过少导致移动过多的数据项(数据负载不均衡)；引入replica的原因是防止数据单点、提高冗余性；引入zone的原因是为了保证分区容忍性；引入weight的原因是为了保证partition分配的均衡</p>
+<h1 id="0x04架构设计"><a href="#0x04架构设计" class="headerlink" title="0x04架构设计"></a>0x04架构设计</h1><h2 id="4-1-Swift数据模型"><a href="#4-1-Swift数据模型" class="headerlink" title="4.1 Swift数据模型"></a>4.1 Swift数据模型</h2><p><img src="http://p5vwq294k.bkt.clouddn.com/openstack%20swift3.png" alt="enter description here"><br>Swift采用层次数据模型，共设三层逻辑结构：Account/Container/Object(账户/容器/对象)。每层节点数均没有限制，可以任意扩展。这里的账户和个人账户不是一个概念，可理解为租户，用来做顶层的隔离机制，可以被多个个人账户所共同使用；容器类似文件夹，代表封装一组对象；对象由元数据和数据两部分组成。</p>
+<h2 id="4-2系统架构"><a href="#4-2系统架构" class="headerlink" title="4.2系统架构"></a>4.2系统架构</h2><h3 id="Swift组件包括："><a href="#Swift组件包括：" class="headerlink" title="Swift组件包括："></a>Swift组件包括：</h3><ul>
+<li><p>代理服务(ProxyServer)：Swift通过Proxy Server向外提供基于HTTP的REST服务接口，会根据环的信息来查找服务地址并转发用户请求至相应的账户、容器或者对象，进行CRUD(增删改查)等操作。由于采用无状态的REST请求协议，可以进行横向扩展来均衡负载。在访问Swift服务之前，需要先通过认证服务获取访问令牌，然后在发送的请求中加入头部信息 X-Auth-Token。</p>
+</li>
+<li><p>认证服务(AuthenticationServer)：验证访问用户的身份信息，并获得一个对象访问令牌(Token)，在一定的时间内会一直有效；验证访问令牌的有效性并缓存下来直至过期时间。<br>缓存服务(CacheServer)：缓存的内容包括对象服务令牌，账户和容器的存在信息，但不会缓存对象本身的数据；缓存服务可采用Memcached集群，Swift会使用一致性哈希算法来分配缓存地址。</p>
+</li>
+<li><p>账户服务(AccountServer)：提供账户元数据和统计信息，并维护所含容器列表的服务，每个账户的信息被存储在一个SQLite数据库中。</p>
+</li>
+<li><p>容器服务(ContainerServer)：提供容器元数据和统计信息(比如对象的总数，容器的使用情况等)，并维护所含对象列表的服务。容器服务并不知道对象存在哪，只知道指定容器里存的哪些对象。 这些对象信息以SQLite数据库文件的形式存储，和对象一样在集群上做类似的备份。 </p>
+</li>
+<li><p>对象服务(ObjectServer)：提供对象元数据和内容服务，可以用来存储、检索和删除本地设备上的对象。在文件系统中，对象以二进制文件的形式存储，它的元数据存储在文件系统的扩展属性(xattr)中，建议采用默认支持扩展属性(xattr)的XFS文件系统。每个对象使用对象名称的哈希值和操作的时间戳组成的路径来存储。最后一次写操作总可以成功，并确保最新一次的对象版本将会被处理。删除也被视为文件的一个版本(一个以”.ts”结尾的0字节文件，ts表示墓碑)。</p>
+</li>
+<li><p>复制服务(Replicator)：会检测本地分区副本和远程副本是否一致，具体是通过对比哈希文件和高级水印来完成，发现不一致时会采用推式(Push)更新远程副本：对于对象的复制，更新只是使用rsync同步文件到对等节点。帐号和容器的复制通过HTTP或rsync来推送整个数据库文件上丢失的记录；另外一个任务是确保被标记删除的对象从文件系统中移除：当有一项(对象、容器、或者帐号)被删除，则一个墓碑文件被设置作为该项的最新版本。复制器将会检测到该墓碑文件并确保将它从整个系统中移除。</p>
+</li>
+<li><p>更新服务(Updater)：当对象由于高负载或者系统故障等原因而无法立即更新时，任务将会被序列化到在本地文件系统中进行排队，以便服务恢复后进行异步更新；例如成功创建对象后容器服务器没有及时更新对象列表，这个时候容器的更新操作就会进入排队中，更新服务会在系统恢复正常后扫描队列并进行相应的更新处理。</p>
+</li>
+<li><p>审计服务(Auditor)：在本地服务器上会反复地爬取来检查对象，容器和账户的完整性，如果发现比特级的错误，文件将被隔离，并复制其他的副本以覆盖本地损坏的副本；其他类型的错误(比如在任何一个容器服务器中都找不到所需的对象列表)会被记录到日志中。</p>
+</li>
+<li><p>账户清理服务(AccountReaper)：移除被标记为删除的账户，删除其所包含的所有容器和对象。删除账号的过程是相当直接的。对于每个账号中的容器，每个对象先被删除然后容器被删除。任何失败的删除请求将不会阻止整个过程，但是将会导致整个过程最终失败(例如，如果一个对象的删除超时，容器将不能被删除，因此账号也不能被删除)。整个处理过程即使遭遇失败也继续执行，这样它不会因为一个麻烦的问题而中止恢复集群空间。账号收割器将会继续不断地尝试删除账号直到它最终变为空，此时数据库在db_replicator中回收处理，最终移除这个数据库文件。<br><img src="http://p5vwq294k.bkt.clouddn.com/openstack%20swift4.png" alt="enter description here"></p>
+</li>
+</ul>
+<p>表1 SwiftRESTful API总结</p>
+<table>
+<thead>
+<tr>
+<th>资源类型</th>
+<th>URL</th>
+<th>GET</th>
+<th>PUT</th>
+<th>POST</th>
+<th>DELETE</th>
+<th>HEAD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>账户</td>
+<td>/account/</td>
+<td>获取容器列表</td>
+<td></td>
+<td></td>
+<td></td>
+<td>获取账户元数据</td>
+</tr>
+<tr>
+<td>容器</td>
+<td>/account/container</td>
+<td>获取对象列表</td>
+<td>创建容器</td>
+<td>更新容器元数据</td>
+<td>删除容器</td>
+<td>获取容器元数据</td>
+</tr>
+<tr>
+<td>对象</td>
+<td>/account/container/object</td>
+<td>获取对象内容和元数据</td>
+<td>创建、更新或拷贝对象</td>
+<td>更新对象元数据</td>
+<td>删除对象</td>
+<td>获取对象元数据</td>
+</tr>
+</tbody>
+</table>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>现有的Swift架构Proxy起到了Router的关键作用，一次成功的写入需要经历如下过程：<br>1.判断是否有Token等验证信息，进而去调用Keystone完成验证，<br>2.验证完成之后根据相应的请求，需要查询进行MD5求值和移位运算得出Partition<br>3.然后再根据Partition在内存里面的Ring数据结构内部的_replica2part2dev_id查得Node的信息(包括id, IP, port等)<br>4.再向Storage Server发送请求<br>5.等到Storage Server返回Response后，再回到Proxy进行后续同样地更新Container Server和Account Server</p>
+<p>收到一个需要保存的 object 的 PUT 请求时，Proxy server 会<br>1.根据其完整的对象路径（/account[/container[/object]]）计算其哈希值，哈希值的长度取决于集群中分区的总数。<br>2.将哈希值的开头 N 个字符映射为数目同 replica 值的若干 partition ID。<br>3.根据 partition ID 确定某个数据服务的 IP 和 port。<br>4.依次尝试连接这些服务的端口。如果有一半的服务无法连接，则拒绝该请求。<br>5.尝试创建对象，存储服务会将对象以文件形式保存到某个磁盘上。（Object server 在完成文件存储后会异步地调用 container service 去更新container数据库）<br>6.在3份拷贝中有两份被成功写入后， Proxy Server 就会向客户端返回成功。</p>
+<p>当 Proxy server 收到一个获取对象的 GET 请求时，它：<br>（1）（2）（3）（4）同前面的 PUT 请求，确定存放所有 replica 的 所有磁盘<br>（5）排序这些 nodes，尝试连接第一个，如果成功，则将二进制数据返回客户端；如果不成功，则尝试下一个。直到成功或者都失败。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/we.png" alt="黄小辉同学 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/air.png" alt="黄小辉同学 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/云计算-openstack/" rel="tag"># 云计算,openstack</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/13/请原谅我所有的难过/" rel="next" title="请原谅我所有的难过">
+                <i class="fa fa-chevron-left"></i> 请原谅我所有的难过
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zOTMzMi8xNTg1OQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://p5vwq294k.bkt.clouddn.com/gakiki.jpg"
+                alt="黄小辉同学" />
+            
+              <p class="site-author-name" itemprop="name">黄小辉同学</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://thief.one/" title="nMask's Blog" target="_blank">nMask's Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.leavesongs.com/" title="离别歌" target="_blank">离别歌</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.sec-wiki.com/" title="sec-viki" target="_blank">sec-viki</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-概述"><span class="nav-number">1.</span> <span class="nav-text">0x01 概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02技术特性"><span class="nav-number">2.</span> <span class="nav-text">0x02技术特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Swift的主要特性"><span class="nav-number">2.0.1.</span> <span class="nav-text">Swift的主要特性:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03关键技术"><span class="nav-number">3.</span> <span class="nav-text">0x03关键技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-一致性哈希-ConsistentHashing"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 一致性哈希(ConsistentHashing)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2数据一致性模型-ConsistencyModel"><span class="nav-number">3.2.</span> <span class="nav-text">3.2数据一致性模型(ConsistencyModel)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3环-Ring"><span class="nav-number">3.3.</span> <span class="nav-text">3.3环(Ring)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04架构设计"><span class="nav-number">4.</span> <span class="nav-text">0x04架构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Swift数据模型"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 Swift数据模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2系统架构"><span class="nav-number">4.2.</span> <span class="nav-text">4.2系统架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Swift组件包括："><span class="nav-number">4.2.1.</span> <span class="nav-text">Swift组件包括：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄小辉同学</span>
+
+  
+</div>
+
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
